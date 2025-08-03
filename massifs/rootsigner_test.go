@@ -15,13 +15,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGenerateECKey(t *testing.T, curve elliptic.Curve) ecdsa.PrivateKey {
+func TestingGenerateECKey(t *testing.T, curve elliptic.Curve) ecdsa.PrivateKey {
 	privateKey, err := ecdsa.GenerateKey(curve, rand.Reader)
 	require.NoError(t, err)
 	return *privateKey
 }
 
-func TestNewRootSigner(t *testing.T, issuer string) RootSigner {
+func TestingNewRootSigner(t *testing.T, issuer string) RootSigner {
 	cborCodec, err := NewRootSignerCodec()
 	require.NoError(t, err)
 	rs := NewRootSigner(issuer, cborCodec)
@@ -35,11 +35,11 @@ func TestNewRootSigner(t *testing.T, issuer string) RootSigner {
 func TestCoseSign1_UnprotectedEncDec(t *testing.T) {
 	logger.New("TEST")
 
-	key := TestGenerateECKey(t, elliptic.P256())
+	key := TestingGenerateECKey(t, elliptic.P256())
 	cborCodec, err := NewRootSignerCodec()
 	require.NoError(t, err)
 	coseSigner := commoncose.NewTestCoseSigner(t, key)
-	rs := TestNewRootSigner(t, "test-issuer")
+	rs := TestingNewRootSigner(t, "test-issuer")
 
 	mustMarshalCBOR := func(value any) []byte {
 		b, err := cborCodec.MarshalCBOR(value)
@@ -399,8 +399,8 @@ func TestRootSigner_Sign1(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			key := TestGenerateECKey(t, elliptic.P256())
-			rs := TestNewRootSigner(t, tt.fields.issuer)
+			key := TestingGenerateECKey(t, elliptic.P256())
+			rs := TestingNewRootSigner(t, tt.fields.issuer)
 
 			coseSigner := commoncose.NewTestCoseSigner(t, key)
 			pubKey, err := coseSigner.LatestPublicKey()
