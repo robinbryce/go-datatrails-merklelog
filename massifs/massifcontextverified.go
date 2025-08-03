@@ -77,7 +77,8 @@ func (mc *MassifContext) VerifyContext(
 		fallthrough
 	case int(MMRStateVersion2):
 		return mc.verifyContextV1V2(&options.Check.Sign1Message, state, options)
-
+	case int(MMRStateVersion0):
+		return mc.verifyContextV0(&options.Check.Sign1Message, state, options)
 	// we don't support v0 anymore
 	default:
 		return nil, fmt.Errorf("unsupported MMR state version %d", state.Version)

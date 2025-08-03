@@ -2,6 +2,7 @@ package storageschema
 
 import (
 	"fmt"
+	"context"
 
 	"github.com/datatrails/go-datatrails-merklelog/massifs/storage"
 )
@@ -21,7 +22,7 @@ func FmtCheckpointPath(prefix string, massifIndex uint32) string {
 		"%s%s", prefix, fmt.Sprintf(V1MMRSignedTreeHeadBlobNameFmt, massifIndex),
 	)
 }
-func (s *StoragePaths) SelectLog(logID storage.LogID) error {
+func (s *StoragePaths) SelectLog(ctx context.Context, logID storage.LogID) error {
 	s.CurrentLogID = logID
 	return nil
 }
